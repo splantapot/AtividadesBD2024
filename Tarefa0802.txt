@@ -1,0 +1,78 @@
+create table funcionarios (
+  id int primary key,
+  nome text not null,
+  contato text not null
+);
+
+create table clientes (
+  id int primary key,
+  nome text not null,
+  endereco text not null,
+  telefone text not null,
+  email text not null
+);
+
+create table livros (
+  id int primary key,
+  titulo text not null,
+  autor text not null,
+  genero text not null,
+  numero_de_exemplares int not null,
+  status text not null
+);
+
+create table emprestimos (
+  id int primary key,
+  data_locacao text not null,
+  data_devolucao text not null,
+  cliente text not null,
+  livros text not null,
+  funcionario_envolvido text not null,
+  situacao text not null
+);
+
+create table reservas (
+  id int primary key,
+  data text not null,
+  livro text not null,
+  cliente text not null,
+  funcionario text not null
+);
+
+-- Funcionarios
+insert into funcionarios values (1, "Rogério", "roger1@gmail.com");
+insert into funcionarios values (2, "Marcos", "robin@gmail.com");
+insert into funcionarios values (3, "Senna", "f1@gmail.com");
+
+-- Clientes
+insert into clientes values (1, "Cearense", "Rua Ceará Q.21 Nº3", "03092005", "ceara@gmail.com");
+insert into clientes values (2, "Mary Christmas", "Polo norte", "25122512", "noel@gmail.com");
+insert into clientes values (3, "Wylly Wonka", "Fabrica de chocolate", "11221122", "wonka@gmail.com");
+
+-- Livros
+insert into livros values (1, "Pequeno Príncipe", "José", "Conto", 2, "Disponível");
+insert into livros values (2, "A Branca de Neve", "Disney", "Conto", 5, "Locado");
+insert into livros values (3, "Física Clássica", "Isaac Newton", "Ciência", 1, "Disponível");
+insert into livros values (4, "Física Moderna", "Albert Einstein", "Ciência", 3, "Locado");
+insert into livros values (5, "Viagem ao Centro da Terra", "José", "Ficção Científica", 4, "Locado");
+insert into livros values (6, "Under", "Almir", "Ficção Científica", 4, "Disponível");
+
+-- Emprestimos
+insert into emprestimos values (1, "03-02-2024", "10-02-2024", "Cearense", "Física Moderna", "Marcos", "Em aberto");
+insert into emprestimos values (2, "03-02-2024", "3-02-2024", "Wylly Wonka", "A Branca de Neve", "Marcos", "Em aberto");
+insert into emprestimos values (3, "04-02-2024", "11-02-2024", "Mary Christmas", "Física Clássica", "Senna", "Devolvido");
+insert into emprestimos values (4, "04-02-2024", "11-02-2024", "Mary Christmas", "Viagem ao Centro da Terra", "Senna", "Em aberto");
+
+-- Reservas
+insert into reservas values (1, "09-02-2024", "A Branca de Neve", "Mary Christmas", "Senna");
+insert into reservas values (2, "10-02-2024", "A Branca de Neve", "Wylly Wonka", "Marcos");
+insert into reservas values (3, "10-02-2024", "Física Moderna", "Wylly Wonka", "Marcos");
+
+-- Questões
+
+select * from livros where status = "Locado";
+select clientes.nome, "emprestimos.livros" from (emprestimos inner join clientes on clientes.nome = emprestimos.cliente) where emprestimos.situacao = "Em aberto";
+select clientes.id, clientes.nome, emprestimos.livros from (emprestimos inner join clientes on clientes.nome = emprestimos.cliente) where clientes.id = 2;
+select * from livros where status = "Disponível" and genero like "Ficção%";
+select clientes.id, clientes.nome, reservas.livro, reservas.data from (reservas inner join clientes on clientes.nome = reservas.cliente) where clientes.id = 3;
+select livros.titulo, reservas.data from (livros inner join reservas on livros.titulo = reservas.livro)
